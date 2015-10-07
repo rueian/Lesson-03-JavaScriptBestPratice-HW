@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * Fire a json XMLHttpRequest.
+ *
+ * @param {string} method - HTTP methods. e.g. 'GET', 'HEAD', 'POST', 'PUT', 'DELET'... etc.
+ * @param {string} url - The endpoint of your request.
+ * @returns {Promise}
+ */
 function XHRequest(method, url) {
   return new Promise(function(resolve, reject) {
     var xhr = new XMLHttpRequest();

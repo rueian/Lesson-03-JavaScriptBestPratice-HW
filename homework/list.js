@@ -2,6 +2,12 @@
 
 (function(exports) {
 
+  /**
+   * Creates an instance of ListManager.
+   *
+   * @constructor
+   * @this {ListManager}
+   */
   var ListManager = function() {
     this._listNoteContent = [];
     this._wrapper = document.querySelector('#note-list-wrapper');
@@ -9,6 +15,13 @@
 
   ListManager.prototype = {
 
+    /**
+     * Binding the 'click' event to the '#note-list-wrapper' node and
+     * fetch the data from server then draw it.
+     * This method should be called only once to initialize the ListManager.
+     *
+     * @this {ListManager}
+     */
     start() {
       this.fetchList().then((function(data){
         this.updateList(data);
@@ -22,6 +35,12 @@
       }).bind(this));
     },
 
+    /**
+     * Dispatch a CustomEvent 'note-open' with note detail to window for others to use.
+     *
+     * @param {CustomEvent} event - Which event.target has 'note-title' in its classList.
+     * @this {ListManager}
+     */
     onNoteOpen(event) {
       if (event.target.classList.contains('note-title')) {
         var id = event.target.dataset.noteId;
@@ -31,6 +50,11 @@
       };
     },
 
+    /**
+     * Dispatch a CustomEvent 'note-open' with the first note.
+     *
+     * @this {ListManager}
+     */
     preloadFirstNote() {
       if (this._listNoteContent.length !== 0) {
         var content = this._listNoteContent[0];
@@ -39,10 +63,21 @@
       }
     },
 
+    /**
+     * Setter of _listNoteContent
+     *
+     * @param {array} list - List of notes. A note contains a title field of string and a passages field of string array.
+     * @this {ListManager}
+     */
     updateList(list) {
       this._listNoteContent = list;
     },
 
+    /**
+     * Fill the '#note-list-wrapper' DOM element with the current _listNoteContent.
+     *
+     * @this {ListManager}
+     */
     drawList() {
       var list = this._listNoteContent;
       var ul = document.createElement('ul');
@@ -59,6 +94,11 @@
       this._wrapper.appendChild(ul);
     },
 
+    /**
+     * Fetch the node list from the server.
+     *
+     * @this {ListManager}
+     */
     fetchList() {
       return XHRequest('GET', 'http://127.0.0.1:8000/demo-list-notes.json');
     }
