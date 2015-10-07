@@ -48,35 +48,19 @@
       var ul = document.createElement('ul');
       ul.id = 'note-title-list';
       var buff = document.createDocumentFragment();
-      list.forEach(function(note, i) {
+      for(var i in list) {
         var li = document.createElement('li');
         li.dataset.noteId = i;
         li.classList.add('note-title');
-        li.textContent = note.title;
-        // Note: buff is captured, so we now have a
-        // little closure naturally.
+        li.textContent = list[i].title;
         buff.appendChild(li);
-      });
+      }
       ul.appendChild(buff);
       this._wrapper.appendChild(ul);
     },
 
     fetchList() {
-      return new Promise(function(resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://127.0.0.1:8000/demo-list-notes.json', true);
-        xhr.responseType = 'json';
-        xhr.onreadystatechange = function(e) {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            var listData = xhr.response;
-            // The flow ends here.
-            resolve(listData);
-          } else if (xhr.status !== 200 ){
-            reject(xhr);
-          }
-        };
-        xhr.send();
-      });
+      return XHRequest('GET', 'http://127.0.0.1:8000/demo-list-notes.json');
     }
   }
 
